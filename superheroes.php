@@ -1,4 +1,6 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
 
 $superheroes = [
   [
@@ -63,10 +65,33 @@ $superheroes = [
   ], 
 ];
 
-?>
+$query = isset($_GET['query']) ? trim($_GET['query']) : '';
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+if (!empty($query)) {
+    $query = filter_var($query, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+
+    $found = false;
+
+    foreach ($superheroes as $hero) {
+        
+        if (strcasecmp($hero['alias'], $query) === 0 || strcasecmp($hero['name'], $query) === 0) {
+            
+            echo "<h3 class='hero-alias'>" . htmlspecialchars($hero['alias'], ENT_QUOTES, 'UTF-8') . "</h3>";
+            echo "<h4>A.K.A. " . htmlspecialchars($hero['name'], ENT_QUOTES, 'UTF-8') . "</h4>";
+            echo "<p>" . htmlspecialchars($hero['biography'], ENT_QUOTES, 'UTF-8') . "</p>";
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        echo "<p class='error'>SUPERHERO NOT FOUND</p>";
+    }
+} else {
+    echo "<ul>";
+    foreach ($superheroes as $hero) {
+        echo "<li>" . htmlspecialchars($hero['alias'], ENT_QUOTES, 'UTF-8') . "</li>";
+    }
+    echo "</ul>";
+}
+?>
