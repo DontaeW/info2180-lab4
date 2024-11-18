@@ -1,43 +1,55 @@
 window.onload = function () {
-    const searchButton = document.querySelector(".buttn");
-    const super_hero = document.getElementById("super_hero");
-    const result = document.getElementById("result");
-    searchButton.addEventListener("click", function (event) {
-        event.preventDefault();
-          
-        const searchVal = super_hero.value.trim();
-        fetch(`http://localhost/info2180-lab4/superheroes.php?query=${encodeURIComponent(searchVal)}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            result.innerHTML = '';
-            
-            const resultTitle = document.createElement('h2');
-            resultTitle.textContent = 'RESULT';
-            result.appendChild(resultTitle);
+  const searchButton = document.querySelector(".buttn");
+  const superHeroInput = document.getElementById("super_hero");
+  const result = document.getElementById("result");
 
-            try {
-                
-                result.innerHTML += data;
-            } catch (e) {
-                throw new Error('Error parsing response data');
-            }
+  searchButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const searchVal = superHeroInput.value.trim();
+
+    if (!searchVal) {
+      fetch('http://localhost/info2180-lab4/superheroes.php')
+        .then((response) => response.text())
+        .then((data) => {
+          result.innerHTML = `
+            <h2>RESULT</h2>
+            <ul>
+              ${data}
+            </ul>
+          `;
         })
-        .catch(error => {
-            console.error('Error:', error);
-            result.innerHTML = `
-                <h2>RESULT</h2>
-                <p class="error">SUPERHERO NOT FOUND</p>
-            `;
+        .catch((error) => {
+          console.error('Error:', error);
+          result.innerHTML = `
+            <h2>RESULT</h2>
+            <p class="error">An error occurred while fetching the heroes list. Please try again.</p>
+          `;
         });
-    });
+      return;
+    }
+    const sanitizedInput = encodeURIComponent(searchVal);
+
+    fetch(`http://localhost/info2180-lab4/superheroes.php?query=${sanitizedInput}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then((data) => {
+        result.innerHTML = `
+          <h2>RESULT</h2>
+          ${data}
+        `;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        result.innerHTML = `
+          <h2>RESULT</h2>
+          <p class="error">An error occurred. Please try again.</p>
+        `;
+      });
+  });
 };
+
