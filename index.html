@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      <title>Avengers Character Search</title> 
-      <link rel="stylesheet" type="text/css" href="styles.css"> 
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avengers Character Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="app.js"></script>
+</head>
+<body class="container">
+    <header class="title-container">
         <h1>Avengers Character Search</h1>
-        <button id="searchButton">Search</button>
-        <script src="app.js"></script>
-    </body>
+    </header>
+
+    <main>
+        <div class="search-container">
+            <h3>Search by Full Name or Alias</h3>
+            <form id="searchForm">
+                <input type="text" id="super_hero" name="super_heroname" placeholder="e.g. Captain America or Steve Rogers">
+                <button class="buttn">Search</button>
+            </form>
+        </div>
+    </main>
+
+    <section>
+        <div class="result-container" id="result">
+            <h2>RESULT</h2>
+
+            <h3 class="alias" id="al"></h3>
+            <h2 class="name" id="al"></h2>
+            <p class="bio" id="al"></p>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="final-container">
+            <p>&copy; 2024, Dontae Whitely</p>
+        </div>
+    </footer>
+</body>
 </html>
+
+
